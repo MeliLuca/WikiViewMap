@@ -93,7 +93,7 @@ mongoose.connect(HOST_NAME + '/' + DB_NAME, { useNewUrlParser: true }).then(func
 
     db = mongoose.connection.db;
     console.log("Connected successfully to server");
-    var u = user.newUser({
+    /* var u = user.newUser({
         username: "admin",
         mail: "admin@mail.it"
     });
@@ -101,7 +101,7 @@ mongoose.connect(HOST_NAME + '/' + DB_NAME, { useNewUrlParser: true }).then(func
     u.setAdmin();
     u.setModerator();
     u.setPassword("admin");
-    console.log('ho settato tutto')
+    console.log('ho settato tutto') */
 
     u.save().then(() => {console.log('admin creato'.green)}).catch(err =>{
         console.log(err)
