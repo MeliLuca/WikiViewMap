@@ -2,7 +2,7 @@
 $(document).ready(function () {
     var recive_points = [];
     var request_bbox = undefined;
-    var URL_server = 'http://localhost:8080';
+    var URL_server = 'http://wvm.dais.unive.it:8080';
     var countViewsGroup = L.featureGroup();
     var bboxViewsGroup = L.featureGroup();
     const layers = [countViewsGroup, bboxViewsGroup]

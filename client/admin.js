@@ -5,7 +5,7 @@ $(document).ready(function () {
         if( window.localStorage.expired == undefined || new Date().getTime() > window.localStorage.expired) window.location.replace('login.html');
     }
 
-    const URL_server = 'http://localhost:8080';
+    const URL_server = 'http://wvm.dais.unive.it:8080';
     var latlng;
 
     /////// variabili per la creazione della mappa

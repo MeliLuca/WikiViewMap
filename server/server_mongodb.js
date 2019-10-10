@@ -391,7 +391,7 @@ app.post('/newCity', auth, function (req, res) {
                 return pnt
             });
             // variabile per settare una coordinata per il documento contenente le informazioni della città
-            let pnt_coord = {lat : points[0].lat, lon : points[0].lon};
+            let pnt_save = {coord : {lat : points[0].lat, lon : points[0].lon}, tot_points: points.length};
             console.log(points.length)
             res.status(200).send('inseriti ' + points.length + ' punti di interesse');
             let init = 0;
@@ -414,9 +414,9 @@ app.post('/newCity', auth, function (req, res) {
                                     await db.collection('info_city').insertOne({
                                         city: research_city,
                                         bbox: research_bbox,
-                                        coordinates : pnt_coord,
+                                        coordinates : pnt_save.coord,
                                         lang: research_lang,
-                                        tot_pnt: points.length,
+                                        tot_pnt: pnt_save.tot_points,
                                         date: new Date().toUTCString,
                                     })
                                     console.log('Tutti i dati salvati'.bgGreen)
