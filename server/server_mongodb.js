@@ -93,7 +93,20 @@ mongoose.connect(HOST_NAME + '/' + DB_NAME, { useNewUrlParser: true }).then(func
 
     db = mongoose.connection.db;
     console.log("Connected successfully to server");
+    var u = user.newUser({
+        username: "admin",
+        mail: "admin@mail.it"
+    });
+    console.log('untente nuovo')
+    u.setAdmin();
+    u.setModerator();
+    u.setPassword("admin");
+    console.log('ho settato tutto')
 
+    u.save().then(() => {console.log('admin creato'.green)}).catch(err =>{
+        console.log(err)
+        console.log('errore'.red)
+    })
     // https server
     /* var server = https.createServer({
       key: fs.readFileSync('keys/key.pem'),
