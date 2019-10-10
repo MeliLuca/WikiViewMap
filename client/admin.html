@@ -1,0 +1,84 @@
+<html>
+
+<head>
+    <!-- bootstrap css -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <!-- bootstap js -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+
+    <!-- serve per integrare Leaflet, per creare le mappe -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css"
+        integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+        crossorigin="" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.pm@latest/dist/leaflet.pm.css" />
+    <script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js"
+        integrity="sha512-GffPMF3RvMeYyc1LWMHtK8EbPv0iNZ8/oTtHPx9/cc2ILxQ+u905qIwdpULaqDkyBKgOaB57QTMg7ztg8Jm2Og=="
+        crossorigin=""></script>
+    <script src="https://unpkg.com/leaflet.pm@latest/dist/leaflet.pm.min.js"></script>
+</head>
+
+<body>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="admin.js"></script>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-3">
+                <br>
+                <button type="button" class="btn btn-outline-primary" id="bbox">Delimita la ricerca </button>
+                <br>
+                <br>
+    
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon1">Città</span>
+                    </div>
+                    <input type="text" class="form-control" id="city" placeholder="" aria-label="City"
+                        aria-describedby="basic-addon1" value=''>
+                </div>
+                <br>
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon1">Lingua di ricerca</span>
+                    </div>
+                    <input type="text" maxlength="2" id="lang" class="form-control col-md-2" placeholder=""
+                        aria-label="lang" aria-describedby="basic-addon1">
+                </div>
+                <br>
+                <input class="btn btn-primary" id='send_data' type="submit" value="Invia richiesta">
+                <input class="btn btn-outline-secondary" id='reset' type="submit" value="Nuova richiesta">
+                <br>
+                <br>
+                <br>
+                <button type="button" class="btn btn-outline-warning" id='show_data' type="submit" >
+                    Mostra dati dal database
+                </button>
+                <br>
+                <br>
+                <button type="button" class="btn btn-Link" onclick="window.location.href = 'WikiViewMap.html' ">
+                    Cerca città presenti nel database
+                </button>
+
+
+            </div>
+            <div class="col-12 col-md-9 col-xl-8 py-md-3 pl-md-5 bd-content">
+                <div id="mapid" style="width: auto; height: 600px; position: relative; outline: none; "
+                    class="leaflet-container leaflet-touch leaflet-fade-anim leaflet-grab leaflet-touch-drag leaflet-touch-zoom"
+                    tabindex="0">
+                </div>
+
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

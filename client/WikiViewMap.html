@@ -1,0 +1,181 @@
+<!-- questa e' la seconda pagina html da usare per l'interfaccia del database -->
+<html>
+
+<head>
+    <!-- bootstrap css -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <!-- libreria ajax jquery -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+    <!-- bootstap js -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+
+    <!-- Plug-in di bootstrapp  -->
+    <script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css" />
+
+
+    <!-- serve per integrare con Leaflet, per creare le mappe -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css"
+        integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+        crossorigin="" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.pm@latest/dist/leaflet.pm.css" />
+    <!-- importo il js di leaflet -->
+    <script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js"
+        integrity="sha512-GffPMF3RvMeYyc1LWMHtK8EbPv0iNZ8/oTtHPx9/cc2ILxQ+u905qIwdpULaqDkyBKgOaB57QTMg7ztg8Jm2Og=="
+        crossorigin=""></script>
+    <!-- importo il js di leaflet.pm -->
+    <script src="https://unpkg.com/leaflet.pm@latest/dist/leaflet.pm.min.js"></script>
+
+</head>
+
+<body>
+    <!-- importo script per utilizzare le chiamate ajax di jquery  -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="WikiViewMap.js"></script>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-3">
+                <div>
+                    <h1 style="font-family:'Times New Roman', Times, serif">WikiViewMap</h1>
+                    <h5 style="font-family: Arial, Helvetica, sans-serif">A map-based data-warehouse of virtual
+                        Wikipedia visits of artistic cities</h5>
+                </div>
+                <br>
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <label class="input-group-text" for="select-city">Seleziona una città</label>
+                    </div>
+                    <select class="custom-select" id="select-city">
+                        <option selected></option>
+                    </select>
+                </div>
+                <button type="button" id="bbox" class="btn btn-primary">
+                    Delimita la ricerca
+                </button>
+                <button type="button" class="btn btn-warning" id="clear">Ripulisci </button>
+                <br>
+                (non necessario)
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon1">Lingua </span>
+                    </div>
+                    <input type="text" class="form-control col-md-2" id="lingua" maxlength="2" placeholder=""
+                        aria-label="Progetto" aria-describedby="basic-addon1" value="it">
+                </div>
+                <br>
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <label class="input-group-text" for="inputGroupSelect01">Tipo di data</label>
+                    </div>
+                    <select class="custom-select" id="inputGroupSelect01">
+                        <option selected>Giornaliero</option>
+                        <option value="1">Mensile</option>
+                        <option value="2">Trimestrale</option>
+                        <option value="3">Annuale</option>
+                    </select>
+                </div>
+                <br>
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon1">Data Inizio</span>
+                    </div>
+                    <label for="validationServer01"></label>
+                    <input type="text" class="form-control" id="dataInizio" placeholder="YYYY-MM-DD"
+                        aria-label="Data Inizio" aria-describedby="basic-addon1" value="20190223">
+
+                </div>
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon1">Data Fine</span>
+                    </div>
+                    <input type="text" class="form-control" id="dataFine" placeholder="YYYY-MM-DD"
+                        aria-label="Data Fine" aria-describedby="basic-addon1" value="20190612">
+                </div>
+                <form class="range-field">
+
+                    <div for="customRange1" id='testo_range'>Filtra per </div>
+                    <input type="range" class="custom-range" id="filter_by_sum" min="0">
+
+                </form>
+                <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownDownload"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" hidden>
+                        Download File
+                    </button>
+                    <div id="download-menu" class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item" id='csvDownload' href="#">csv</a>
+                        <a class="dropdown-item" id='jsonDownload' href="#">json</a>
+                    </div>
+                </div>
+                <br>
+                <button type="button" id="ricevi-dati" class="btn btn-primary">
+                    Ricerca
+                </button>
+                <br>
+                <br>
+                <button type="button" class="btn btn-Link" id='login'> Accesso Admin </button>
+
+                <p>Date: <input type="text" id="datepicker"></p>
+
+
+            </div>
+
+            <div class="col-12 col-md-9 col-xl-8 py-md-3 pl-md-5 bd-content">
+                <div id="mapid" style="width: auto; height: 600px; position: relative; outline: none; "
+                    class="leaflet-container leaflet-touch leaflet-fade-anim leaflet-grab leaflet-touch-drag leaflet-touch-zoom"
+                    tabindex="0">
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+</body>
+
+<style>
+    #mapid {
+        height: 300px;
+    }
+
+    .info {
+        padding: 6px 8px;
+        font: 14px/16px Arial, Helvetica, sans-serif;
+        background: white;
+        background: rgba(255, 255, 255, 0.8);
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+        border-radius: 5px;
+    }
+
+    .info h5 {
+        margin: 0 0 5px;
+        color: #777;
+    }
+
+    .legend {
+        line-height: 18px;
+        color: #555;
+    }
+
+    .legend i {
+        width: 18px;
+        height: 18px;
+        background-color: beige;
+        float: left;
+        margin-right: 8px;
+        opacity: 0.7;
+    }
+</style>
+
+</html>
