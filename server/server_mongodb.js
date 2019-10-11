@@ -410,8 +410,8 @@ app.post('/newCity', auth, function (req, res) {
             let end = RATE_LANGS_LIMIT;
             get_pages(points, init, end)
                 .then(data => {
-                    console.log('cerco le views')
                     let pages = data.flat()
+                    console.log('cerco le views')
                     points = []; // serve per liberare memoria
                     init = 0;
                     end = RATE_VIEWS_LIMIT;
@@ -445,7 +445,7 @@ app.post('/newCity', auth, function (req, res) {
                         })
                 })
                 .catch(err => {
-                    console.log(err.code)
+                    console.log(err)
                     console.log('errore chiamata langs'.bgRed)
                 })
         })
