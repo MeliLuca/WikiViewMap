@@ -389,7 +389,6 @@ app.post('/newCity', auth, function (req, res) {
     let research_city = req.query.city;
     let json_bbox = req.body.bbox;
     let research_bbox = json_bbox != undefined ? JSON.parse(json_bbox) : 'null';
-
     get_points(research_city, research_lang, research_bbox)
         .then(response => {
             let points = response.map(obj => {
