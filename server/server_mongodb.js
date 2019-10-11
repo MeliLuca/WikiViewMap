@@ -413,7 +413,6 @@ app.post('/newCity', auth, function (req, res) {
                 .then(data => {
                     console.log('cerco le views')
                     let pages = data.flat()
-                    data=[]; // serve per liberare memoria
                     points = []; // serve per liberare memoria
                     init = 0;
                     end = RATE_VIEWS_LIMIT;
