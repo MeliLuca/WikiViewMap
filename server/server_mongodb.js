@@ -410,7 +410,17 @@ app.post('/newCity', auth, function (req, res) {
             let end = RATE_LANGS_LIMIT;
             get_pages(points, init, end)
                 .then(data => {
-                    let pages = data.flat()
+                    // creo la funzione perchè .flat() non va per versioni di node < 11
+                    function flatter(){
+                        let ris=[];
+                        for(let val of data){
+                            for(let el of val){
+                                ris.push(el)
+                            }
+                        }
+                        return ris;
+                    }
+                    let pages = flatter()
                     console.log('cerco le views')
                     points = []; // serve per liberare memoria
                     init = 0;
@@ -500,7 +510,7 @@ function query_views(req) {
                 coordinates: { $geoWithin: { $box: [[bbox[1].lng, bbox[0].lat], [bbox[0].lng, bbox[1].lat]] } }
             }).toArray((err, result) => {
                 if (err) console.log(err)
-                console.log('numero di pagine trovate' + result.length);
+                console.log('numero di pagine trovate ' + result.length);
                 let id_list = result.map(x => { return x._id })
                 collection.aggregate([
                     {
@@ -613,8 +623,7 @@ app.get('/views', function (req, res) {
     query_views(req)
         .then(result => {
             console.log(result.length)
-            download_cache = { city: req.query.city, data: result };
-            res.send(result)
+            res.send(result.filter(x => {return x.views > 0}))
         })
         .catch(err => {
             console.log(err);

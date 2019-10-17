@@ -2,8 +2,8 @@
 $(document).ready(function () {
     var recive_points = [];
     var request_bbox = undefined;
-    const URL_server = 'http://wvm.dais.unive.it:8080';
-    //const URL_server = 'http://localhost:8080';
+    //const URL_server = 'http://wvm.dais.unive.it:8080';
+    const URL_server = 'http://localhost:8080';
     var countViewsGroup = L.featureGroup();
     var bboxViewsGroup = L.featureGroup();
     const layers = [countViewsGroup, bboxViewsGroup]
@@ -170,6 +170,7 @@ $(document).ready(function () {
                 bbox: request_bbox
             }
         }).then(res => {
+            console.log(res)
             request_bbox = undefined;
             let filename = "views_" + city + "_" + lang + "_" + dataInizio + "_" + dataFine;
             download(filename, res);
