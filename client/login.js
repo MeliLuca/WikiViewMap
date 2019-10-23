@@ -5,6 +5,7 @@ $(document).ready(function () {
     $('#submit').click(function () {
         let username = $('#inputEmail').val();
         let password = $('#inputPassword').val();
+        alert(username +' '+password)
         $.ajax({
             headers: {
                 'Authorization': 'Basic ' + btoa(username + ':' + password),
