@@ -1,6 +1,6 @@
 $(document).ready(function () {
     //////// variabili per il programma
-    const URL_server = 'http://wvm.dais.unive.it';
+    const URL_server = 'http://wvm.dais.unive.it:8080';
     //const URL_server = 'http://localhost:8080';
     $('#submit').click(function () {
         let username = $('#inputEmail').val();

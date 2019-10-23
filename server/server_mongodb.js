@@ -619,6 +619,20 @@ function query_views(req) {
     })
 }
 
+app.get('/views', function (req, res) {
+    let options = { explain: true };
+    query_views(req)
+        .then(result => {
+            console.log(result.length)
+            download_cache = { city: req.query.city, data: result };
+            res.send(result)
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(404).send(err)
+        })
+
+})
 // permette di visualizzare statistiche quali la somma delle views delle pagine
 app.get('/prova', function (req, res) {
     res.send('<h1>Ciao Figa to mare<h1>')
