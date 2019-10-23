@@ -36,6 +36,8 @@ if (!process.env.JWT_SECRET) {
 
 colors.enabled = true;
 
+app.use(express.static('../client'))
+
 // VARIABILI DI DEBUG
 var count_views = 0;
 var count_insert_data = 0;
