@@ -132,7 +132,6 @@ $(document).ready(function () {
         legend.addTo(mymap);
         info.addTo(mymap);
     }
-
     // modifiche utilizzando mongodb
     /*     function show_response(data) {
             recive_points = data;
@@ -143,13 +142,14 @@ $(document).ready(function () {
             console.log(recive_points[0].sum)
             viewCountData(recive_points)
         } */
-    function show_response(data) {
-        recive_points = data;
-        console.log(recive_points)
+    function show_response(recive_points) {
         mymap.setView([recive_points[0].lat, recive_points[0].lon], 12);
         $('#bbox').prop('disabled', false);
+        console.log(recive_points[0])
         $('#filter_by_sum').attr('max', recive_points[0].views);
-        $('#filter_by_sum').attr('step', 1000);
+        let sum = recive_points.reduce((accumulator, currentValue)=>{return accumulator + currentValue.views}, 0)
+        let avg = parseInt(sum / recive_points.length , 10)
+        $('#filter_by_sum').attr('step', avg);
         $('#dropdownDownload').attr('hidden', false);
         viewCountData(recive_points)
     }
@@ -188,7 +188,6 @@ $(document).ready(function () {
             //snapDistance: 20,
         });
         function catchCoord(ev) {
-            console.log('prendo le coordinate')
             latlng.push(mymap.mouseEventToLatLng(ev.originalEvent));
             if (latlng.length >= 2) {
                 mymap.off('click', catchCoord);
@@ -209,12 +208,16 @@ $(document).ready(function () {
         viewCountData(filter_points)
     })
 
-    $('#login').click(function(){
+    $('#login').click(function () {
         // controlla se il token è ancora valido
-        console.log('cliccato')
         let today = new Date();
-        if(today.getTime() < window.localStorage.expired) window.location.replace('admin.html');
+        if (today.getTime() < window.localStorage.expired) window.location.replace('admin.html');
         else window.location.replace('login.html')
+    })
+
+    $('#clear').click(function(){
+        // problemi con l'eliminazione degli elementi inseriti tramite lealfet.pm
+        window.location.reload()
     })
 
     function download(filename, data) {

@@ -71,6 +71,8 @@ const RATE_VIEWS_LIMIT = 50;
 const TIME_WAIT_VIEWS = 1500;
 // massimo numero di elementi da inserire contemporaneamente
 const MAX_BATCH_DIM = 300;
+// stringa per scrivere gli errori nel file di log
+const ERR_STRING = '###### '+new Date().toISOString()+' ####### => '
 
 app.use(cors('*'));
 app.use(function (err, req, res, next) {
@@ -95,26 +97,7 @@ mongoose.connect(HOST_NAME + '/' + DB_NAME, { useNewUrlParser: true }).then(func
 
     db = mongoose.connection.db;
     console.log("Connected successfully to server");
-    /* var u = user.newUser({
-        username: "admin",
-        mail: "admin@mail.it"
-    });
-    console.log('untente nuovo')
-    u.setAdmin();
-    u.setModerator();
-    u.setPassword("admin");
-    console.log('ho settato tutto')
 
-    u.save().then(() => {console.log('admin creato'.green)}).catch(err =>{
-        console.log(err)
-        console.log('errore'.red)
-    }) */
-    // https server
-    /* var server = https.createServer({
-      key: fs.readFileSync('keys/key.pem'),
-      cert: fs.readFileSync('keys/cert.pem')
-    }, app);  */
-    // http server
     var server = http.createServer(app);
     server.listen(PORT_NUM, function () { return console.log(("HTTP Server started on port " + PORT_NUM).green); });
 });
@@ -405,7 +388,7 @@ app.post('/newCity', auth, function (req, res) {
                 return pnt
             });
             // variabile per settare una coordinata per il documento contenente le informazioni della città
-            let pnt_save = {coord : {lat : points[0].lat, lon : points[0].lon}, tot_points: points.length};
+            let pnt_save = { coord: { lat: points[0].lat, lon: points[0].lon }, tot_points: points.length };
             console.log(points.length)
             res.status(200).send('inseriti ' + points.length + ' punti di interesse');
             let init = 0;
@@ -413,10 +396,10 @@ app.post('/newCity', auth, function (req, res) {
             get_pages(points, init, end)
                 .then(data => {
                     // creo la funzione perchè .flat() non va per versioni di node < 11
-                    function flatter(){
-                        let ris=[];
-                        for(let val of data){
-                            for(let el of val){
+                    function flatter() {
+                        let ris = [];
+                        for (let val of data) {
+                            for (let el of val) {
                                 ris.push(el)
                             }
                         }
@@ -437,7 +420,7 @@ app.post('/newCity', auth, function (req, res) {
                                     await db.collection('info_city').insertOne({
                                         city: research_city,
                                         bbox: research_bbox,
-                                        coordinates : pnt_save.coord,
+                                        coordinates: pnt_save.coord,
                                         lang: research_lang,
                                         tot_pnt: pnt_save.tot_points,
                                         date: new Date().toUTCString,
@@ -471,9 +454,35 @@ app.post('/newCity', auth, function (req, res) {
 
 app.get('/infodb', auth, function (req, res) {
     let info_coll = db.collection('info_city')
-    info_coll.find({}).toArray((err,items)=>{
+    info_coll.find({}).toArray((err, items) => {
         res.send(items)
     })
+})
+
+app.get('/delete', auth, function (req, res) {
+    let coll = db.collection(req.query.city)
+    coll.drop()
+        .then(data => {
+            db.collection('info_city').deleteMany({city : req.query.city})
+            .then(data =>{
+                res.send('città eliminata')
+            })
+            .catch(err =>{
+                fs.appendFile('errorLog.txt', ERR_STRING + err, function (err) {
+                    if (err) throw err;
+                    console.log('Saved!');
+                  });
+                res.send('errore eliminazione collection INFO')
+            })
+        })
+        .catch(err =>{
+            fs.appendFile('errorLog.txt', ERR_STRING + err, function (err) {
+                if (err) throw err;
+                console.log('Saved!');
+              });
+            res.send('errore eliminazione collection CITY')
+        })
+
 })
 
 app.get('/citiesList', function (req, res) {
@@ -592,22 +601,6 @@ function query_views(req) {
                 {
                     $project: { _id: 0 }
                 }
-                // tempo di esecuzione di 17,7 ai 22 secondi
-                /* { $unwind: '$pageviews' },
-                {
-                    $match: { 'pageviews.timestamp': { $gte: dataInizio, $lte: dataFine } }
-                }, */
-                /* {
-                    $group: {
-                        _id: {
-                            title: '$title',
-                            lon: { $arrayElemAt: ['$coordinates', 0] },
-                            lat: { $arrayElemAt: ['$coordinates', 1] }
-                        },
-
-                        sum: { $sum: '$pageviews.views' }
-                    }
-                } */
             ], function (err, result) {
                 result.toArray(function (err, documents) {
                     console.log('risposta')
@@ -624,18 +617,12 @@ app.get('/views', function (req, res) {
     query_views(req)
         .then(result => {
             console.log(result.length)
-            download_cache = { city: req.query.city, data: result };
             res.send(result)
         })
         .catch(err => {
             console.log(err);
             res.status(404).send(err)
         })
-
-})
-// permette di visualizzare statistiche quali la somma delle views delle pagine
-app.get('/prova', function (req, res) {
-    res.send('<h1>Ciao Figa to mare<h1>')
 
 })
 
@@ -645,6 +632,7 @@ app.get('/lang', function (req, res) {
         res.send(data.sort());
     })
 })
+
 // creazione admin
 /* var u = user.newUser({
         username: "admin",

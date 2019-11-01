@@ -1,8 +1,8 @@
 
 $(document).ready(function () {
     //////// variabili per il programma
-    ()=>{
-        if( window.localStorage.expired == undefined || new Date().getTime() > window.localStorage.expired) window.location.replace('login.html');
+    () => {
+        if (window.localStorage.expired == undefined || new Date().getTime() > window.localStorage.expired) window.location.replace('login.html');
     }
 
     const URL_server = 'http://wvm.dais.unive.it:8080';
@@ -95,7 +95,7 @@ $(document).ready(function () {
 
     function catch_coord(bbox) {
         return [[
-            [bbox[1].lng, bbox[1].lat], 
+            [bbox[1].lng, bbox[1].lat],
             [bbox[1].lng, bbox[0].lat],
             [bbox[0].lng, bbox[0].lat],
             [bbox[0].lng, bbox[1].lat]
@@ -111,6 +111,8 @@ $(document).ready(function () {
                 xhr.setRequestHeader('Authorization', 'Bearer ' + window.localStorage.token.replace(/"/g, ""));
             }
         }).then(data => {
+            $('#delete_city').attr('hidden', false);
+            $('#name_city').attr('hidden', false);
             console.log(data)
             let geoObj = data.map(x => {
                 return {
@@ -134,5 +136,25 @@ $(document).ready(function () {
         }).catch(err => {
             console.log(err)
         })
+    })
+    $('#delete_city').click(function () {
+        let name = $('#name_city').val()
+        if (name == '') alert('inserisci il nome di una città che si deridera eliminare')
+        else {
+            $.ajax({
+                url: URL_server + '/delete?city='+name,
+                method: 'GET',
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader('Authorization', 'Bearer ' + window.localStorage.token.replace(/"/g, ""));
+                }
+            })
+            .then(res =>{
+                mapGroup.clearLayers();
+                $('#show_data').click();
+            })
+            .catch(err =>{
+                alert('errore nella cancellazione della città. Verifica che il nome sia corretto')
+            })
+        } 
     })
 });
